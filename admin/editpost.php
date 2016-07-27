@@ -1,4 +1,4 @@
-﻿<?php include( 'templates/header.php' ); ?>
+<?php include( 'templates/header.php' ); ?>
 <?php include "../config/config.php"; ?>    
 <?php include "../lib/Database.php"; ?> 
 <?php include "../helpers/Formate.php"; ?>  
@@ -16,6 +16,21 @@
         </p>
         <div class="block"> 
         <?php 
+        	if ( !isset( $_GET['edit_id'] ) || $_GET['edit_id'] == NULL )
+        	{
+        		header( "Location: postlist.php" );
+        	} 
+        	else
+        	{
+        		$edit_id = $_GET['edit_id'];
+        		$query = "SELECT * FROM `post_table` WHERE id = '$edit_id'";
+        		$edit_result = $db->select( $query );
+        		$edit_row = $edit_result->fetch_assoc();
+        	}
+
+         ?>   
+
+        <?php 
             if ( $_SERVER['REQUEST_METHOD'] === "POST" ) 
             {
                
@@ -25,9 +40,8 @@
                $title    = $formate->inputValidation( $_POST['title'] ); 
 
                $title = mysqli_real_escape_string( $db->link, $title );           
-               $category  = mysqli_real_escape_string( $db->link, $category );           
-               $body  = mysqli_real_escape_string( $db->link, $body );
-                         
+               $category = mysqli_real_escape_string( $db->link, $category );           
+               $body = mysqli_real_escape_string( $db->link, $body );           
                //Code for Images upload
                $file_permition = array( 'jpg','jpeg','png','gif' );
                $file_name      = $_FILES['images']['name']; 
@@ -60,16 +74,47 @@
                    {
                        throw new Exception( "Please upload max 1mb file", 1);                      
                    }
-
-                   move_uploaded_file( $tmp_name, $unique_name );
-                   $query = 
-                   "INSERT INTO `post_table` (title,cat_id,images,body) VALUES('$title','$category','$unique_name','$body')";
-                   $result = $db->insert( $query );
-                   if ( $result ) 
+                   if ( !empty( $file_name ) ) 
                    {
-                       throw new Exception( "Sucessfully add a post", 1);
-                       
+
+	                   	$unlink_query = "SELECT * FROM `post_table` WHERE id = '$edit_id'";
+	                   	$result = $db->select( $unlink_query );
+	                   	if ( $result ) 
+	                   	{
+	                   		$row = $result->fetch_assoc();
+	                   		$unline_image = $row['images'];
+	                   		unlink( $unline_image );
+	                   	}
+	                   move_uploaded_file( $tmp_name, $unique_name );
+	                   $query = "UPDATE `post_table` SET 
+	                   title = '$title',
+	                   cat_id = '$category',
+	                   images = '$unique_name',
+	                   body = '$body'
+	                   WHERE id = '$edit_id'";
+	                   $result = $db->insert( $query );
+	                   if ( $result ) 
+	                   {
+	                       throw new Exception( "Sucessfully Updated a post", 1);
+	                       
+	                   }                   	
                    }
+                   else
+                   {
+                   	   move_uploaded_file( $tmp_name, $unique_name );
+	                   $query = "UPDATE `post_table` SET 
+	                   title = '$title',
+	                   cat_id = '$category',	  
+	                   body = '$body'
+	                   WHERE id = '$edit_id'";
+	                   $result = $db->update( $query );
+	                   if ( $result ) 
+	                   {
+	                       throw new Exception( "Sucessfully Updated a post", 1);
+	                       
+	                   } 
+                   }
+
 
                } catch (Exception $e) {
                    $error_message = $e->getMessage(); 
@@ -77,7 +122,10 @@
 
             }
 
-         ?>              
+         ?>   
+
+
+        
          <form action="" method="POST" enctype="multipart/form-data">
             <table class="form">
                 <?php if( isset( $error_message)){ echo $error_message; } ?>
@@ -86,7 +134,8 @@
                         <label>Title</label>
                     </td>
                     <td>
-                        <input type="text" name="title" placeholder="Enter Post Title..." class="medium" />
+                    	<input type="hidden" name="update_id" value="<?php echo $edit_row['id'];?>">
+                        <input type="text" name="title" value="<?php echo $edit_row['title'];?>" class="medium" />
                     </td>
                 </tr>
              
@@ -96,8 +145,12 @@
                     </td>
                     <td>
                         <select id="select" name="cat_id">
-                           <option selected value="0">Selecte Category</option>
+                           <option value="0">Selecte Category</option>
                         <?php 
+                        if ( isset( $_GET['edit_id'] )) 
+                        {
+                        	$edit_id = $_GET['edit_id'];
+                        }
                             $query = "SELECT * FROM `category`";
                             $result = $db->select( $query );
                             if ( $result ) 
@@ -105,7 +158,8 @@
                                while ( $row = $result->fetch_assoc()) 
                                {
                                 ?>
-                                <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
+
+                                <option <?php if( $edit_row['cat_id'] == $row['id'] ){ ?> selected <?php } ;?> value="<?php echo $row['id'];?>"><?php echo $row['name'];?></option>
                                 <?php 
                                }
                             }
@@ -121,6 +175,8 @@
                         <label>Upload Image</label>
                     </td>
                     <td>
+                    	<img width="200" height="150" src="<?php echo $edit_row['images'];?>" alt="Images">
+                    	<br>
                         <input type="file" name="images" />
                     </td>
                 </tr>
@@ -129,7 +185,9 @@
                         <label>Content</label>
                     </td>
                     <td>
-                        <textarea class="tinymce" name="body"></textarea>
+                        <textarea class="tinymce" name="body">
+                      <?php echo $edit_row['body'];?>
+                        </textarea>
                     </td>
                 </tr>
 				<tr>

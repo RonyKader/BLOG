@@ -23,7 +23,17 @@
                         <input type="text" placeholder="Enter Website Slogan..." name="slogan" class="medium" />
                     </td>
                 </tr>
-				 
+
+                 <tr>
+                    <td>
+                        <label>Upload Logo</label>
+                    </td>
+                    <td>
+                        <img width="200" height="120" src="uploads/2ec2d1d865.jpg" alt="">
+                        <br>
+                        <input type="file" class="medium" />
+                    </td>
+                </tr>				 
 				
 				 <tr>
                     <td>
