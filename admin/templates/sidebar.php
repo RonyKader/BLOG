@@ -11,10 +11,23 @@
                             </ul>
                         </li>
 						
-                         <li><a class="menuitem">Update Pages</a>
+                         <li><a class="menuitem">Dynamic page</a>
                             <ul class="submenu">
-                                <li><a>About Us</a></li>
-                                <li><a>Contact Us</a></li>
+                                <li><a href="page_create.php">add new page</a></li>
+                                <?php 
+                                  $query = "SELECT * FROM `page_table`";
+                                  $result = $db->select( $query );
+                                  if ( $result ) 
+                                  {
+                                     while ( $row = $result->fetch_assoc() ) 
+                                     {
+                                    ?>
+                                    <li><a href="page.php?page_id=<?php echo $row['id'];?>"><?php echo $row['title'];?></a></li>
+                                    <?php   
+                                     }
+                                  }
+
+                                 ?>
                             </ul>
                         </li>
                         <li><a class="menuitem">Category Option</a>
