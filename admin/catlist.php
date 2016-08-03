@@ -1,11 +1,4 @@
 ﻿<?php include( 'templates/header.php' ); ?>
- <?php include "../config/config.php"; ?>	
- <?php include "../lib/Database.php"; ?>	
- <?php include "../helpers/Formate.php"; ?>	
- <?php 
- 	$db = new Database();
- 	$formate = new Formate();
- ?>
 <?php include( 'templates/sidebar.php' ); ?>
 
     <div class="grid_10">

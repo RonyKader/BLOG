@@ -14,7 +14,8 @@
                          <li><a class="menuitem">Dynamic page</a>
                             <ul class="submenu">
                                 <li><a href="page_create.php">add new page</a></li>
-                                <?php 
+                                
+                                <?php                                 
                                   $query = "SELECT * FROM `page_table`";
                                   $result = $db->select( $query );
                                   if ( $result ) 

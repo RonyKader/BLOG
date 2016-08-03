@@ -1,12 +1,5 @@
 ﻿<?php include( 'templates/header.php' ); ?>
 <?php include( 'templates/sidebar.php' ); ?>
-<?php include "../config/config.php"; ?>    
-<?php include "../lib/Database.php"; ?> 
-<?php include "../helpers/Formate.php"; ?>  
-<?php 
-    $db = new Database();
-    $formate = new Formate();
-?>
 
 <div class="grid_10">		
     <div class="box round first grid">

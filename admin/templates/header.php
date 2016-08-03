@@ -1,6 +1,13 @@
 <?php include( '../helpers/Session.php' );
     Session::CheckSession();
  ?>
+ <?php include "../config/config.php"; ?>    
+ <?php include "../lib/Database.php"; ?> 
+ <?php include "../helpers/Formate.php"; ?>  
+ <?php 
+     $db = new Database();
+     $formate = new Formate();
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
