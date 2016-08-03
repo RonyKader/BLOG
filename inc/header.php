@@ -69,7 +69,19 @@ $(window).load(function() {
 <div class="navsection templete">
 	<ul>
 		<li><a id="active" href="index.php">Home</a></li>
-		<li><a href="about.php">About</a></li>	
+		<?php 
+			$query = "SELECT * FROM `page_table` WHERE status = 1";
+			$result = $db->select( $query );
+			if ( $result ) 
+			{
+				while ( $row = $result->fetch_assoc() ) 
+				{
+				?>
+				<li><a href="front_page.php?page_id=<?php echo $row['id'];?>"><?php echo $row['title'];?></a></li>				
+				<?php
+				}
+			}
+		 ?>
 		<li><a href="contact.php">Contact</a></li>
 	</ul>
 </div>

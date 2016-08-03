@@ -14,7 +14,7 @@
                
                $update_id    = $formate->inputValidation( $_POST['id'] );                   
                $title    = $formate->inputValidation( $_POST['title'] );                   
-               $body     = $formate->inputValidation( $_POST['body'] );              
+               $body     =  $_POST['body'];              
 
                $title = mysqli_real_escape_string( $db->link, $title );                       
                $body  = mysqli_real_escape_string( $db->link, $body );
