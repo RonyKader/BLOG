@@ -4,3 +4,5 @@ define("DB_USER", "root");
 define("DB_PASS", "srs12345");
 define("DB_NAME", "blog");
 
+define( "TITLE", "Home Title" );
+

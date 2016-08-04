@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Blog Site</title>
+	<title><?php echo TITLE;?> | Blog Site</title>
 	<meta name="language" content="English">
 	<meta name="description" content="It is a website about education">
 	<meta name="keywords" content="blog,cms blog">
@@ -77,7 +77,7 @@ $(window).load(function() {
 				while ( $row = $result->fetch_assoc() ) 
 				{
 				?>
-				<li><a href="front_page.php?page_id=<?php echo $row['id'];?>"><?php echo $row['title'];?></a></li>				
+				<li><a <?php if( isset( $_GET['page_id'] ) && $row['id'] == $_GET['page_id'] ){ echo "id='active'";} ;?> href="front_page.php?page_id=<?php echo $row['id'];?>"><?php echo $row['title'];?></a></li>				
 				<?php
 				}
 			}
